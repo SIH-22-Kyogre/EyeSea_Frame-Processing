@@ -1,11 +1,12 @@
 import os 
 import shutil
 
+output_path = os.path.abspath(os.path.join(os.path.realpath(__file__), os.path.pardir, 'data', 'output'))
 input_path = os.path.abspath(os.path.join(os.path.realpath(__file__), os.path.pardir, 'data', 'input'))
 # redefine and uncomment below, for other paths
-# input_path = ""
+input_path = "/home/karthikd/Workspace/MachineLearning/Projects/SIH'22/Frames-Preprocessing/Deduplication/data/fish_chengalpattutank_aug14"
 
-reqd_frame_nos = list(map(str([
+reqd_frame_nos = list(map(str, [
     16528,
     25317,
     25511,
@@ -24,11 +25,11 @@ reqd_frame_nos = list(map(str([
     30454,
     30689,
     34069,
-])))
+]))
 
 for frame_file in os.listdir(input_path):
-    if frame_file in reqd_frame_nos:
+    if any([(reqd_frame in frame_file) for reqd_frame in reqd_frame_nos]):
         shutil.copy(
             os.path.join(input_path, frame_file),
-            os.path.join(output_path, frame_file
+            os.path.join(output_path, frame_file)
         )
