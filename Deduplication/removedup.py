@@ -10,6 +10,7 @@ from os.path import isfile, join, abspath
 import imghdr
 import uuid
 import shutil
+from functools import reduce
 
 class FileItem:
     def __init__(self):
@@ -34,10 +35,12 @@ def avhash(im):
     if not isinstance(im, Image.Image):
         im = Image.open(im)
     im = im.resize((8, 8), Image.ANTIALIAS).convert('L')
-    avg = reduce(lambda x, y: x + y, im.getdata()) / 64.
-    return reduce(lambda x, (y, z): x | (z << y),
-                  enumerate(map(lambda i: 0 if i < avg else 1, im.getdata())),
-                  0)
+    avg = reduce(lambda x, y: x + y, im.getdata()) / 64
+    print(list(enumerate(list(map(lambda i: 0 if i < avg else 1, im.getdata())),
+                  0)))
+    return reduce(lambda x, tup: x | tup[1] << tup[0],
+                  enumerate(list(map(lambda i: 0 if i < avg else 1, im.getdata())),
+                  0))
 
 def hamming(h1, h2):
     h, d = 0, h1 ^ h2
@@ -60,6 +63,8 @@ def layItemCoKichThuocNhoHon(item1, item2):
         return item1
     else:
         return item2
+
+
 
 if __name__ == '__main__':
     # construct the argument parse and parse the arguments
@@ -86,12 +91,14 @@ if __name__ == '__main__':
         os.makedirs(notImgFolder)
 
     #Print for view
-    print "Input folder : ", inputFolder
-    print "Output folder : ", outputFolder
+    print("Input folder : ", inputFolder)
+    print("Output folder : ", outputFolder)
 
     valid_images = [".jpg",".png", ".jpeg"]
+    print(os.listdir(inputFolder))
     for path, subdirs, files in os.walk(inputFolder):
         for f in files:
+            print(f)
             fullPath = join(path, f)
             ext = os.path.splitext(f)[1]
             if ext.lower() not in valid_images:
@@ -129,7 +136,8 @@ if __name__ == '__main__':
                 if os.path.exists(newPath):
                     newName = tmpName + item.ext
                     newPath = join(outputFolder, newName)
-                print "percent ", percent, " - ", item.name
+                print("percent ", percent, " - ", item.name)
                 shutil.move(item.path, newPath)
-    print "Done deduplicating"
+                
+    print("Done deduplicating")
 
