@@ -42,7 +42,7 @@ reqd_frame_nos = list(map(str, [
 ]))
 """
 
-"""
+# """
 # Shrimp - Dec 20
 reqd_frame_nos = list(map(str, [
     297,
@@ -55,7 +55,7 @@ reqd_frame_nos = list(map(str, [
     688,
     695
 ]))
-"""
+# """
 
 
 frame_file_l = os.listdir(input_path)
